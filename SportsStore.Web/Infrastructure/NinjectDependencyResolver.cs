@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ninject;
+using Moq;
+using SportsStore.Domain.Abstract;
+using SportsStore.Domain.Entitites;
 
 namespace SportsStore.Web.Infrastructure
 {
@@ -12,7 +15,7 @@ namespace SportsStore.Web.Infrastructure
         private IKernel kernel;
         public NinjectDependencyResolver(IKernel kernelParam)
         {
-            kernelParam = kernelParam;
+            kernel = kernelParam;
             AddBindings();
         }
         public object GetService(Type serviceType)
@@ -25,7 +28,13 @@ namespace SportsStore.Web.Infrastructure
         }
         private void AddBindings()
         {
-            //put bindings here
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new List<Product> {
+                new Product { Name = "Football", Price = 25},
+                new Product { Name = "Surf board", Price = 179},
+                new Product { Name = "Running shoes", Price = 95}
+            });
+            kernel.Bind<IProductRepository>().ToConstant(mock.Object);
         }
     }
 }

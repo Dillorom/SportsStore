@@ -7,7 +7,7 @@ using SportsStore.Domain.Entitites;
 
 namespace SportsStore.Domain.Abstract
 {
-    interface IProductRepository
+    public interface IProductRepository
     {
         IEnumerable<Product> Products { get; }
     }
